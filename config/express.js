@@ -7,12 +7,16 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compress = require('compression');
 const methodOverride = require('method-override');
+const bcrypt = require('bcryptjs');
+const session = require("express-session");
+const flash = require("express-flash");
+require("dotenv").config();
 
 module.exports = (app, config) => {
   const env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
-  
+
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'ejs');
 
@@ -26,6 +30,14 @@ module.exports = (app, config) => {
   app.use(compress());
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
+
+  app.use(session({
+    secret: process.env.cookieSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 }
+  }));
+  app.use(flash());
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
   controllers.forEach((controller) => {
@@ -57,6 +69,7 @@ module.exports = (app, config) => {
       title: 'error'
     });
   });
+
 
   return app;
 };

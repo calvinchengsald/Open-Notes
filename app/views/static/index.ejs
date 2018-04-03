@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./../partials/head.ejs %>
+  </head>
+  <body>
+      <% include ../partials/nav.ejs %>
+      <!-- Page Content -->
+      <main class="container">
+
+        <% include ../partials/messages.ejs %>
+        <!-- Jumbotron Header -->
+        <header class="jumbotron my-4">
+
+          <h1 class="display-3"><%= title %></h1>
+          <p class="lead">All the worlds knowledge!</p>
+
+        </header>
+
+      </main>
+      <!-- /.container -->
+
+      <% include ../partials/baseScript.ejs %>
+      </body>
+</html>
