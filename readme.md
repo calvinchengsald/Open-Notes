@@ -4,7 +4,8 @@ A clone of Wikipedia
 
 Requires a .env file to properly work
 
-Example .env file:
+Example .env file <br>
+
   sendgrid="[sendgrid key]" <br>
   userCreateUrl="http://localhost:3000/user/create" <br>
   cookieSecret="[any string value you want]" <br>
