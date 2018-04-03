@@ -29,6 +29,7 @@ module.exports = {
       callback(null,err);
       return;
     }
+    body.email = body.email.toLowerCase();
     User.all()
     .then((users)=>{
       let uniqueEmail = true;
@@ -104,6 +105,7 @@ module.exports = {
       callback(null,err);
       return;
     }
+    body.email = body.email.toLowerCase();
     User.all()
     .then((users)=>{
       let uniqueEmail = true;
@@ -124,7 +126,8 @@ module.exports = {
       User.create({
         name: body.name,
         email: body.email,
-        password: body.password
+        password: body.password,
+        role: 0
       })
       .then((user)=>{
         callback(null,null, user);

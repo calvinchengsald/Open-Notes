@@ -1,4 +1,5 @@
 const Wiki = require('../models').Wiki;
+const Authorizer = require('../policy/wiki');
 
 module.exports = {
   getAllWikis(callback){
@@ -45,21 +46,28 @@ module.exports = {
       if(!wiki){
         return callback("Wiki not found");
       }
-      let updatedWiki = {
-        title: req.body.title,
-        body: req.body.body,
-        private: req.body.private
-      };
-      wiki.update(updatedWiki, {
-        fields: Object.keys(updatedWiki)
-      })
-      .then(() => {
-        callback(null, wiki);
-      })
-      .catch((err) => {
-        console.log(err)
+      const authorized = new Authorizer(req.user, wiki).edit();
+      if(authorized){
+        let updatedWiki = {
+          title: req.body.title,
+          body: req.body.body,
+          private: req.body.private
+        };
+        wiki.update(updatedWiki, {
+          fields: Object.keys(updatedWiki)
+        })
+        .then(() => {
+          callback(null, wiki);
+        })
+        .catch((err) => {
+          console.log(err)
+          callback(err);
+        });
+      }
+      else {
+        req.flash("notice", "You are not authorized to do that.");
         callback(err);
-      });
+      }
 
 
     });
@@ -72,13 +80,20 @@ module.exports = {
       if(!wiki){
         return callback("Wiki not found");
       }
-      wiki.destroy().
-      then((delected)=>{
-        callback(null, delected);
-      })
-      .catch((err) => {
-        callback(err, wiki);
-      })
+      const authorized = new Authorizer(req.user, wiki).destroy();
+      if(authorized){
+        wiki.destroy().
+        then((delected)=>{
+          callback(null, delected);
+        })
+        .catch((err) => {
+          callback(err, wiki);
+        })
+      }
+      else {
+        req.flash("notice", "You are not authorized to do that.");
+        callback(err);
+      }
 
     });
 

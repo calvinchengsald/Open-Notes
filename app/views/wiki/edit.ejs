@@ -23,13 +23,16 @@
           <textarea rows="4" class="form-control" name="body" placeholder="Enter Description"><%= wiki.body %></textarea>
           <small class="text-muted" id="bodyHelp">body must be 10 or more characters in length.</small>
         </div>
-        <div class="form-group">
-          <label for="private">Mode</label>
-          <select class="form-control" name="private">
-            <option value="True" <%= wiki.private=="True"?"selected":"" %> >Private</option>
-            <option value="False" <%= wiki.private=="False"?"selected":"" %> >Public</option>
-          </select>
-        </div>
+
+        <% if(currentUser.id === wiki.userId) { %>
+          <div class="form-group">
+            <label for="private">Mode</label>
+            <select class="form-control" name="private">
+              <option value="True" <%= wiki.private==true?"selected":"" %> >Private</option>
+              <option value="False" <%= wiki.private==false?"selected":"" %> >Public</option>
+            </select>
+          </div>
+        <% } %>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
     </main>

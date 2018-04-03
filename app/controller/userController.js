@@ -54,6 +54,7 @@ module.exports = {
   },
 
   signInPost(req, res, next){
+    req.body.email = req.body.email.toLowerCase();
     passport.authenticate("local")(req, res, function () {
   //    console.log("i am here!");
       if(!req.user){

@@ -24,6 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    role: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      //0 member
+      //1 premium
+      //2 admin
     }
   } ,{
     freezeTableName: true
