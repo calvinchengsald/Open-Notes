@@ -1,10 +1,11 @@
 const User = require('../models').User;
 
 const sgMail = require('@sendgrid/mail');
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   signUp(body, callback){
-    if (body.password != body.password_conf) {
+    if (body.password !== body.password_conf) {
       let err = {
         title: "Unmatch Error",
         msg: "Password must match with confirmation password"
@@ -141,5 +142,16 @@ module.exports = {
       callback(err);
       return;
     })
-  }
+  },
+
+  comparePassword(user, password, cb){
+    bcrypt.compare(password, user.password, function(err, isMatch){
+      if(err){
+        return cb(err);
+      } else {
+        cb(null, isMatch);
+      }
+    });
+  },
+
 }

@@ -10,6 +10,7 @@ const methodOverride = require('method-override');
 const bcrypt = require('bcryptjs');
 const session = require("express-session");
 const flash = require("express-flash");
+const passportConfig = require("./passport");
 require("dotenv").config();
 
 module.exports = (app, config) => {
@@ -35,9 +36,15 @@ module.exports = (app, config) => {
     secret: process.env.cookieSecret,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60000 }
+    cookie: { maxAge: 1.21e+9 }
   }));
   app.use(flash());
+  passportConfig.init(app);
+
+  app.use((req,res,next) => {
+     res.locals.currentUser = req.user;
+     next();
+  })
 
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
   controllers.forEach((controller) => {
@@ -69,6 +76,7 @@ module.exports = (app, config) => {
       title: 'error'
     });
   });
+
 
 
   return app;
