@@ -111,7 +111,7 @@ module.exports = {
     }, function(err, charge) {
       // asynchronously called
       console.log(charge);
-      if(charge.status =="succeeded"){
+      if(charge && charge.status && charge.status =="succeeded"){
         req.flash("notice", "Payment made");
         let updatedUser = {
           role : 1,
