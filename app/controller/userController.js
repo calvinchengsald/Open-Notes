@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models').User;
 const userQueries = require ('../queries/user');
 const passport = require("passport");
-const stripe = require("stripe")("sk_test_xVsz3q3rKwV2L9GaUikHS7t4");
+const stripe = require("stripe")(process.env.stripeSecret);
 
 
 module.exports = {
@@ -95,6 +95,7 @@ module.exports = {
   },
 
   payment(req,res,next){
+    console.log(process.env.stripeSecret);
     res.render("user/payment");
   },
 
