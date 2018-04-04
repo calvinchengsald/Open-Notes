@@ -5,7 +5,7 @@ module.exports = class wikiPolicy extends ApplicationPolicy {
 
 
   edit() {
-    return (this._isMember() && !this.record.private) || this._isAdmin() || this._isOwner();
+    return (this._isMember() && !this.record.private) || this._isAdmin() || this._isPremium();
   }
 
   update() {
@@ -14,6 +14,10 @@ module.exports = class wikiPolicy extends ApplicationPolicy {
 
   destroy() {
     return this.update();
+  }
+
+  show(){
+    return !this.record.private || (this.record.private && (this._isAdmin() || this._isPremium())) ;
   }
 
 

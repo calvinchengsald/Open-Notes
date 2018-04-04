@@ -100,4 +100,31 @@ module.exports = {
 
   },
 
+  makePublic(id, callback){
+    return Wiki.all()
+    .then((wikis)=>{
+      wikis.map((wiki,index)=>{
+        if(wiki.private == false || wiki.userId != id){
+
+        }
+        else {
+          let updatedWiki = {
+            private : false
+          }
+          wiki.update(updatedWiki, {
+            fields: Object.keys(updatedWiki)
+          })
+          .then(() => {
+
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+
+      });
+      callback(null, null);
+    })
+  }
+
 }

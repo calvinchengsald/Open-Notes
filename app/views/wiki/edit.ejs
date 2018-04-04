@@ -24,7 +24,7 @@
           <small class="text-muted" id="bodyHelp">body must be 10 or more characters in length.</small>
         </div>
 
-        <% if(currentUser.id === wiki.userId) { %>
+        <% if(currentUser.role >= 1) { %>
           <div class="form-group">
             <label for="private">Mode</label>
             <select class="form-control" name="private">
@@ -32,6 +32,8 @@
               <option value="False" <%= wiki.private==false?"selected":"" %> >Public</option>
             </select>
           </div>
+        <% } else {%>
+          <p>Mode: <%= wiki.private?"Private":"Public" %> </p>
         <% } %>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>

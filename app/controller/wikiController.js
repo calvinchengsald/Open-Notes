@@ -46,40 +46,40 @@ module.exports = {
 
   show(req,res,next){
 
-    const authorized = new Authorizer(req.user).show();
-    if(authorized){
-      wikiQueries.getWiki(req.params.id, (err,wiki)=>{
-        if(err){
-          req.flash("error", err);
-          res.redirect("/wiki");
-        }
-        else {
+    wikiQueries.getWiki(req.params.id, (err,wiki)=>{
+      if(err){
+        req.flash("error", err);
+        res.redirect("/wiki");
+      }
+      else {
+        const authorized = new Authorizer(req.user, wiki).show();
+
+        if(authorized){
           res.render('wiki/show', {wiki});
         }
-      })
-    }
-    else {
-      req.flash("notice", "You are not authorized for this action");
-      res.redirect('/wiki');
-    }
+        else {
+          req.flash("notice", "You are not authorized for this action");
+          res.redirect('/wiki');
+        }
+      }
+    })
   },
 
   edit(req,res,next){
     wikiQueries.getWiki(req.params.id, (err,wiki)=>{
-
-      const authorized = new Authorizer(req.user, wiki).edit();
-      if(authorized){
-        if(err){
-          req.flash("error", err);
-          res.redirect("/wiki");
-        }
-        else {
-          res.render('wiki/edit', {wiki});
-        }
+      if(err){
+        req.flash("error", err);
+        res.redirect("/wiki");
       }
       else {
-        req.flash("notice", "You are not authorized for this action");
-        res.redirect(`/wiki/${wiki.id}`);
+        const authorized = new Authorizer(req.user, wiki).edit();
+        if(authorized){
+          res.render('wiki/edit', {wiki});
+        }
+        else {
+          req.flash("notice", "You are not authorized for this action");
+          res.redirect(`/wiki/${wiki.id}`);
+        }
       }
     })
   },

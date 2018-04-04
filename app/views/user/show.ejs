@@ -4,8 +4,8 @@
     <% include ../partials/head.ejs %>
     <script>
     function customConfirmDelete() {
-        console.log("CLICKED");
-        if (confirm("Are you sure you want to downgrade? There are no refunds with this process.")) {
+        var confirmText = "Are you sure you want to downgrade? There are no refunds with this process. Additionally, all private wikis you own will be set to public.";
+        if (confirm(confirmText)) {
             var submit = document.getElementById("postForm");
             submit.submit();
         } else {

@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models').User;
+const Wiki = require('../models').Wiki;
 const userQueries = require ('../queries/user');
+const wikiQueries = require ('../queries/wiki');
 const passport = require("passport");
 const stripe = require("stripe")(process.env.stripeSecret);
 
@@ -131,21 +133,6 @@ module.exports = {
         res.redirect(`/user/${req.user.id}`);
       }
     })
-    // .then((charge)=>{
-    //   req.flash("notice", "Payment made");
-    //   let updatedUser = {
-    //     role : 1,
-    //   };
-    //   userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
-    //     if(err){
-    //       req.flash("notice", " There was an error with the upgrade");
-    //     }
-    //     else {
-    //       req.flash("notice", " Account Upgraded!");
-    //     }
-    //     res.redirect(`/user/${req.user.id}`);
-    //   });
-    // })
   },
 
   downgrade(req,res,next){
@@ -154,12 +141,22 @@ module.exports = {
     };
     userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
       if(err){
-        req.flash("notice", " There was an error with the upgrade");
+        req.flash("notice", " There was an error with the downgrade, account");
+        res.redirect(`/user/${req.user.id}`);
       }
       else {
-        req.flash("notice", " Account Downgraded!");
+        wikiQueries.makePublic(req.user.id, (err, wikis)=>{
+          if(err){
+            req.flash("notice", " There was an error with the downgrade, wikis");
+            res.redirect(`/user/${req.user.id}`);
+          }
+          else {
+            req.flash("notice", " Account Downgraded!");
+            res.redirect(`/user/${req.user.id}`);
+          }
+        })
+
       }
-      res.redirect(`/user/${req.user.id}`);
     });
 
   },

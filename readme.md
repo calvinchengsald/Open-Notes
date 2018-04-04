@@ -15,3 +15,11 @@ to generate a sendgrid key, please sign up for a [sendGrid account](https://send
 <br>
 
 to generate a strip key, please sign up for a [stripe account](https://stripe.com/) and view your secret key [here](https://dashboard.stripe.com/account/apikeys)
+
+
+
+User Tiers:
+
+Standard - Can only create and view public wikis
+Premium - Can also create/view private wikis
+Admin - 

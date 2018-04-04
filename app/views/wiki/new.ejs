@@ -22,13 +22,24 @@
           <textarea rows="4" class="form-control" name="body" placeholder="Enter Post body"></textarea>
           <small class="text-muted" id="bodyHelp">body must be 10 or more characters in length.</small>
         </div>
-        <div class="form-group">
-          <label for="private">Mode</label>
-          <select class="form-control" name="private">
-            <option value="True" selected="true">Private</option>
-            <option value="False">Public</option>
-          </select>
-        </div>
+
+        <% if(currentUser.role >= 1) { %>
+          <div class="form-group">
+            <label for="private">Mode</label>
+            <select class="form-control" name="private">
+            <option value="False" selected="true">Public</option>
+              <option value="True" >Private</option>
+            </select>
+          </div>
+        <% } else {%>
+          <div class="form-group">
+            <label for="private">Mode</label>
+            <select class="form-control" name="private">
+              <option value="False" selected="true">Public</option>
+            </select>
+          </div>
+        <% } %>
+
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </main>
