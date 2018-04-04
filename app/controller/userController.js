@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models').User;
 const userQueries = require ('../queries/user');
 const passport = require("passport");
+const stripe = require("stripe")("sk_test_xVsz3q3rKwV2L9GaUikHS7t4");
 
 
 module.exports = {
@@ -79,7 +80,69 @@ module.exports = {
       req.flash("notice", "You've already signed out!");
       res.redirect("/");
     }
-  }
+  },
+
+  show(req,res,next){
+    userQueries.getUser(req.params.id, (err,user)=>{
+      if(err){
+        req.flash("notice", "err, check log")
+        res.redirect("/");
+      }
+      else {
+        res.render('user/show', {user});
+      }
+    });
+  },
+
+  payment(req,res,next){
+    res.render("user/payment");
+  },
+
+  upgrade(req,res,next){
+    var token = req.body.stripeToken; // Using Express
+
+    // Charge the user's card:
+    stripe.charges.create({
+      amount: 1500,
+      currency: "usd",
+      description: "Preimum Membership",
+      source: token,
+    }, function(err, charge) {
+      // asynchronously called
+
+    })
+    .then((charge)=>{
+      req.flash("notice", "Payment made");
+      let updatedUser = {
+        role : 1,
+      };
+      userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
+        if(err){
+          req.flash("notice", " There was an error with the upgrade");
+        }
+        else {
+          req.flash("notice", " Account Upgraded!");
+        }
+        res.redirect(`/user/${req.user.id}`);
+      });
+    })
+  },
+
+  downgrade(req,res,next){
+    let updatedUser = {
+      role : 0,
+    };
+    userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
+      if(err){
+        req.flash("notice", " There was an error with the upgrade");
+      }
+      else {
+        req.flash("notice", " Account Downgraded!");
+      }
+      res.redirect(`/user/${req.user.id}`);
+    });
+
+  },
 
 
 };

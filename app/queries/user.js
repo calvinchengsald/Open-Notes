@@ -157,4 +157,37 @@ module.exports = {
     });
   },
 
+  getUser(id, callback){
+    return User.findById(id)
+    .then((user) => {
+      callback(null, user);
+    })
+    .catch((err) => {
+      console.log(err);
+      callback(err);
+    })
+  },
+
+  updateUser(id, updatedUser, callback){
+    return User.findById(id)
+    .then((user) => {
+      if(!user){
+        callback("User not found");
+      }
+      user.update(updatedUser, {
+          fields: Object.keys(updatedUser)
+        })
+        .then((user2) => {
+          callback(null, user2);
+        })
+        .catch((err) => {
+          console.log(err);
+          callback(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      callback(err);
+    })
+  }
 }

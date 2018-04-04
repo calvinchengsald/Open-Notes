@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head.ejs %>
+  </head>
+  <body>
+
+    <% include ../partials/nav.ejs %>
+    <% include ../partials/messages.ejs %>
+
+    <main class="container">
+
+
+ <!-- #1 -->
+      <h1><%= `${currentUser.name}` %></h1>
+
+      <hr>
+      <div>
+        <p>Upgrading to Premium Membership: $15 </p>
+      </div>
+
+      <form action="/user/<%=currentUser.id%>/upgrade" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_wYAG6yIkrL25wiIPiBSEx8fv"
+          data-amount="1500"
+          data-name="Open Notes"
+          data-description="Premium Membership"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto">
+        </script>
+      </form>
+
+
+    </main>
+
+    <% include ../partials/baseScript.ejs %>
+
+  </body>
+</html>

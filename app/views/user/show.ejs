@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../partials/head.ejs %>
+    <script>
+    function customConfirmDelete() {
+        console.log("CLICKED");
+        if (confirm("Are you sure you want to downgrade? There are no refunds with this process.")) {
+            var submit = document.getElementById("postForm");
+            submit.submit();
+        } else {
+
+        }
+    }
+    </script>
+  </head>
+  <body>
+
+
+    <% include ../partials/nav.ejs %>
+    <% include ../partials/messages.ejs %>
+
+    <main class="container">
+
+
+ <!-- #1 -->
+      <h1><%= `${user.name}'s profile` %></h1>
+
+      <hr>
+
+      <p> <%= `Email: ${user.email}` %></p>
+      <div>
+        <% if(user.role === 0){ %>
+          <p> Access: Standard </p>
+          <% if(typeof(currentUser) != "undefined" && user.id == currentUser.id){ %>
+          <a href="/user/<%=user.id%>/upgrade">
+            <span class="btn btn-primary">Upgrade</span>
+          </a>
+          <% } %>
+        <% } else if(user.role === 1){ %>
+          <p> Access: Premium </p>
+          <% if(typeof(currentUser) != "undefined" && user.id == currentUser.id){ %>
+          <form id="postForm" action="/user/<%=user.id%>/downgrade" method="post">
+          </form>
+          <button  class="btn btn-danger" onclick="customConfirmDelete()">Downgrade</button>
+
+          <% } %>
+        <% } else { %>
+          <p> Access: Admin </p>
+        <% } %>
+      </div>
+
+
+    </main>
+
+
+
+    <% include ../partials/baseScript.ejs %>
+
+  </body>
+</html>
