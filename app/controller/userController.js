@@ -110,23 +110,42 @@ module.exports = {
       source: token,
     }, function(err, charge) {
       // asynchronously called
-
-    })
-    .then((charge)=>{
-      req.flash("notice", "Payment made");
-      let updatedUser = {
-        role : 1,
-      };
-      userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
-        if(err){
-          req.flash("notice", " There was an error with the upgrade");
-        }
-        else {
-          req.flash("notice", " Account Upgraded!");
-        }
+      console.log(charge);
+      if(charge.status =="succeeded"){
+        req.flash("notice", "Payment made");
+        let updatedUser = {
+          role : 1,
+        };
+        userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
+          if(err){
+            req.flash("notice", " There was an error with the upgrade");
+          }
+          else {
+            req.flash("notice", " Account Upgraded!");
+          }
+          res.redirect(`/user/${req.user.id}`);
+        });
+      }
+      else {
+        req.flash("notice", " There was an error with the payment!");
         res.redirect(`/user/${req.user.id}`);
-      });
+      }
     })
+    // .then((charge)=>{
+    //   req.flash("notice", "Payment made");
+    //   let updatedUser = {
+    //     role : 1,
+    //   };
+    //   userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
+    //     if(err){
+    //       req.flash("notice", " There was an error with the upgrade");
+    //     }
+    //     else {
+    //       req.flash("notice", " Account Upgraded!");
+    //     }
+    //     res.redirect(`/user/${req.user.id}`);
+    //   });
+    // })
   },
 
   downgrade(req,res,next){
