@@ -24,11 +24,11 @@
         <% }) %>
       </ul>
 
-      <% if(currentUser && currentUser.role >= 1) { %>
+      <% if(currentUser) { %>
         <h1>Private Wikis</h1>
         <ul class="list-group">
           <% wikis.forEach((wiki) => { %>
-            <% if(wiki.private ) { %>
+            <% if(wiki.private && (wiki.userId==currentUser.id || (wiki.collaborators.findIndex(collab=> collab.userId == currentUser.id)!=-1)) ) { %>
             <li class="list-group-item">
               <a href="/wiki/<%= wiki.id %>"> <%= wiki.title %> </a>
             </li>

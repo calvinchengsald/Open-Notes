@@ -1,5 +1,6 @@
 const User = require('../models').User;
 const Wiki = require('../models').Wiki;
+const Collaborator = require('../models').Collaborator;
 const sgMail = require('@sendgrid/mail');
 const bcrypt = require("bcryptjs");
 
@@ -169,7 +170,15 @@ module.exports = {
       Wiki.scope({method: ["allAuthoredWikis", id]}).all()
       .then((wikis)=>{
         result.wikis = wikis;
-        return callback(null, result);
+        Collaborator.scope({method: ["allCollabWikis", id]}).all()
+        .then((collabs)=>{
+          result.collabs = collabs;
+          return callback(null, result);
+        })
+        .catch((err) => {
+          console.log(err);
+          callback(err);
+        })
       })
       .catch((err) => {
         console.log(err);

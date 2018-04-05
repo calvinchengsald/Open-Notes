@@ -2,24 +2,12 @@
 
 module.exports = (sequelize, DataTypes) => {
 
-  const Wiki = sequelize.define('Wiki', {
+  var Collaborator = sequelize.define('Collaborator', {
     id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    body: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    private: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -29,31 +17,41 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
           as: "userId",
       },
+    },
+    wikiId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+          model: "Wikis",
+          key: "id",
+          as: "wikiId",
+      },
     }
+
   } ,{
   });
 
-  Wiki.associate = function(models) {
+
+  Collaborator.associate = function(models) {
     // associations can be defined here
-    Wiki.belongsTo(models.User, {
+    Collaborator.belongsTo(models.User, {
       foreignKey: "userId",
       onDelete: "CASCADE"
     });
-    Wiki.hasMany(models.Collaborator, {
+    Collaborator.belongsTo(models.Wiki, {
       foreignKey: "wikiId",
-      as: "collaborators"
+      onDelete: "CASCADE"
     });
-    Wiki.addScope("allAuthoredWikis", (userId) => {
+    Collaborator.addScope("allCollabWikis", (userId) => {
       return {
         include: [{
-          model: models.Collaborator, as: "collaborators",
+          model: models.Wiki
         }],
         where: { userId: userId},
         order: [["createdAt", "ASC"]]
       }
     });
-
   };
 
-  return Wiki;
+  return Collaborator;
 };

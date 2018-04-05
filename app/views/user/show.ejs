@@ -67,6 +67,19 @@
       </ul>
       <hr>
 
+      <h2> Collaborating Wikis</h2>
+      <ul class="list-unstyled">
+        <% if(result.collabs) { %>
+          <% result.collabs.forEach((collab) => { %>
+            <li class="list-group-item">
+              <a href="/wiki/<%= collab.Wiki.id %>"> <%= collab.Wiki.title %> </a>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+      <hr>
+
+
 
     </main>
 

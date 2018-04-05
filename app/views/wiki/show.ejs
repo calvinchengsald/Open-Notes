@@ -11,6 +11,8 @@
       <div style="display: flex; align-items:center;">
         <h1><%= wiki.title %></h1>
       </div>
+      <small class="text-muted" >Author: <%= wiki.User.email %></small>
+
 
       <% if(currentUser ) { %>
       <a href="/wiki/<%= wiki.id %>/edit" class="btn btn-warning">Edit</a>
@@ -22,6 +24,20 @@
       <%- wiki.body %>
 
       <p>Mode: <%= wiki.private?"Private":"Public" %> </p>
+
+      <section id="collaborator-list">
+       <% if(wiki.collaborators) { %>
+         <h2> Collaborators <h2>
+         <ul class="list-group">
+         <% wiki.collaborators.forEach((collaborator) => { %>
+           <li class="list-group-item">
+             <a href="/user/<%= collaborator.User.id %>"> <%= collaborator.User.email %> </a>
+           </li>
+         <% }) %>
+         </ul>
+       <% } %>
+      </section>
+
     </main>
 
     <% include ../partials/baseScript.ejs %>

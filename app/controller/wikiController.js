@@ -29,7 +29,7 @@ module.exports = {
     if(authorized){
       wikiQueries.create(req, (err,wiki)=>{
         if(err){
-          req.flash("error", err);
+          req.flash("notice", err);
           console.log(err);
           res.redirect("/wiki");
         }
@@ -49,7 +49,8 @@ module.exports = {
 
     wikiQueries.getWiki(req.params.id, (err,wiki)=>{
       if(err){
-        req.flash("error", err);
+        req.flash("notice", err);
+        console.log(err);
         res.redirect("/wiki");
       }
       else {
@@ -74,7 +75,8 @@ module.exports = {
   edit(req,res,next){
     wikiQueries.getWiki(req.params.id, (err,wiki)=>{
       if(err){
-        req.flash("error", err);
+        req.flash("notice", err);
+        console.log(err);
         res.redirect("/wiki");
       }
       else {
@@ -93,7 +95,8 @@ module.exports = {
   update(req,res,next){
     wikiQueries.updateWiki(req, (err,wiki)=>{
       if(err){
-        req.flash("error", err);
+        req.flash("notice", err);
+        console.log(err);
         res.redirect("/wiki");
       }
       else {
@@ -105,7 +108,8 @@ module.exports = {
   delete(req,res,next){
     wikiQueries.deleteWiki(req, (err,wki)=>{
       if(err){
-        req.flash("error", err);
+        req.flash("notice", err);
+        console.log(err);
         res.redirect(`/wiki/${wiki.id}`);
       }
       else {

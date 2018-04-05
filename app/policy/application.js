@@ -16,7 +16,7 @@ module.exports = class ApplicationPolicy {
   }
 
   _isPremium() {
-    return this.user && this.user.role == 1;
+    return this.user && this.user.role >= 1;
   }
 
   _isMember(){

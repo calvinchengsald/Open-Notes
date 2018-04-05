@@ -1,9 +1,17 @@
 const Wiki = require('../models').Wiki;
+const Collaborator = require('../models').Collaborator;
+const User = require('../models').User;
 const Authorizer = require('../policy/wiki');
 
 module.exports = {
   getAllWikis(callback){
-    return Wiki.all()
+    return Wiki.all({
+       include: [
+          {
+            model: Collaborator, as: "collaborators", include: [{model: User }]
+          }
+        ]
+    })
     .then((wikis)=>{
       callback(null, wikis);
     })
@@ -30,23 +38,36 @@ module.exports = {
   },
 
   getWiki(id, callback){
-    return Wiki.findById(id)
+    return Wiki.findById(id, {
+       include: [
+          {
+            model: Collaborator, as: "collaborators", include: [{model: User }]
+          },
+          {model: User}
+        ]
+    })
     .then((wiki) => {
       callback(null, wiki);
     })
     .catch((err) => {
       console.log(err);
-      callback(err);
+      callback("Wiki was not found");
     })
   },
 
   updateWiki(req, callback){
-    return Wiki.findById(req.params.id)
+    return Wiki.findById(req.params.id,{
+       include: [
+          {
+            model: Collaborator, as: "collaborators", include: [{model: User }]
+          }
+        ]
+    })
     .then((wiki) => {
       if(!wiki){
         return callback("Wiki not found");
       }
-      const authorized = new Authorizer(req.user, wiki).edit();
+      const authorized = new Authorizer(req.user, wiki).update();
       if(authorized){
         let updatedWiki = {
           title: req.body.title,
@@ -65,8 +86,8 @@ module.exports = {
         });
       }
       else {
-        req.flash("notice", "You are not authorized to do that.");
-        callback(err);
+
+        return callback("You are not authorized to do that update.");
       }
 
 
@@ -75,7 +96,13 @@ module.exports = {
   },
 
   deleteWiki(req, callback){
-    return Wiki.findById(req.params.id)
+    return Wiki.findById(req.params.id,{
+       include: [
+          {
+            model: Collaborator, as: "collaborators", include: [{model: User }]
+          }
+        ]
+    })
     .then((wiki)=>{
       if(!wiki){
         return callback("Wiki not found");

@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "wikis"
     });
+    User.hasMany(models.Collaborator, {
+      foreignKey: "userId",
+      as: "collaborators"
+    });
 
     User.beforeCreate((user) => {
 
