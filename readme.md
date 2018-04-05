@@ -1,6 +1,8 @@
 
 A clone of Wikipedia
 
+[Heroku Link](https://open-notes.herokuapp.com/)
+
 
 Requires a .env file to properly work
 
