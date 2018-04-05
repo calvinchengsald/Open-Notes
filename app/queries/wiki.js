@@ -56,6 +56,8 @@ module.exports = {
   },
 
   updateWiki(req, callback){
+
+
     return Wiki.findById(req.params.id,{
        include: [
           {
@@ -66,6 +68,12 @@ module.exports = {
     .then((wiki) => {
       if(!wiki){
         return callback("Wiki not found");
+      }
+      if(req.body.title.length < 2){
+        return callback("Title must be at least 2 characters long", wiki);
+      }
+      else if(req.body.body.length < 10){
+        return callback("Body must be at least 10 characters long", wiki);
       }
       const authorized = new Authorizer(req.user, wiki).update();
       if(authorized){

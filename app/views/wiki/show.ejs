@@ -11,7 +11,9 @@
       <div style="display: flex; align-items:center;">
         <h1><%= wiki.title %></h1>
       </div>
-      <small class="text-muted" >Author: <%= wiki.User.email %></small>
+      <div>
+        <small class="text-muted" >Author: <%= wiki.User.email %></small>
+      </div>
 
 
       <% if(currentUser ) { %>

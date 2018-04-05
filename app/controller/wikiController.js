@@ -27,6 +27,16 @@ module.exports = {
 
     const authorized = new Authorizer(req.user).new();
     if(authorized){
+      if(req.body.title.length < 2){
+        req.flash("notice", "Title must be at least 2 characters long");
+        res.redirect("/wiki/new");
+        return;
+      }
+      else if(req.body.body.length < 10){
+        req.flash("notice", "Body must be at least 10 characters long");
+        res.redirect("/wiki/new");
+        return;
+      }
       wikiQueries.create(req, (err,wiki)=>{
         if(err){
           req.flash("notice", err);
@@ -97,7 +107,7 @@ module.exports = {
       if(err){
         req.flash("notice", err);
         console.log(err);
-        res.redirect("/wiki");
+        res.redirect("/wiki/${wiki.id}/edit");
       }
       else {
         res.redirect(`/wiki/${wiki.id}`);
