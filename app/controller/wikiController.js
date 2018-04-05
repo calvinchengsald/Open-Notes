@@ -3,6 +3,7 @@ const router = express.Router();
 const Wiki = require('../models').Wiki;
 const wikiQueries = require ('../queries/wiki');
 const Authorizer = require('../policy/wiki');
+const markdown = require( "markdown" ).markdown;
 
 
 module.exports = {
@@ -55,6 +56,11 @@ module.exports = {
         const authorized = new Authorizer(req.user, wiki).show();
 
         if(authorized){
+          console.log(wiki.body);
+          wiki.body = markdown.toHTML(wiki.body);
+
+            console.log("AFTER");
+            console.log(wiki.body);
           res.render('wiki/show', {wiki});
         }
         else {
