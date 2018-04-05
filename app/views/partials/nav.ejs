@@ -7,7 +7,7 @@
     <% if(typeof(currentUser) != "undefined") { %>
       <a class="navbar-brand" href="/user/<%=currentUser.id%>"> <%=currentUser.email%></a>
     <% } %>
-    
+    <div class="input-group">
         <% if(typeof(currentUser)== "undefined" ) {%>
             <a href="/user/signup">
               <span class="btn btn-primary">Sign Up</span>
@@ -23,5 +23,7 @@
           <a href="/wiki">
             <span class="btn btn-primary">Wikis</span>
           </a>
+
+    </div>
   </div>
 </nav>
