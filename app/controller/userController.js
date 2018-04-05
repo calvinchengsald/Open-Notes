@@ -85,13 +85,13 @@ module.exports = {
   },
 
   show(req,res,next){
-    userQueries.getUser(req.params.id, (err,user)=>{
+    userQueries.getUser(req.params.id, (err,result)=>{
       if(err){
         req.flash("notice", "err, check log")
         res.redirect("/");
       }
       else {
-        res.render('user/show', {user});
+        res.render('user/show', {result});
       }
     });
   },

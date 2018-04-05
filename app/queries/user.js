@@ -1,5 +1,5 @@
 const User = require('../models').User;
-
+const Wiki = require('../models').Wiki;
 const sgMail = require('@sendgrid/mail');
 const bcrypt = require("bcryptjs");
 
@@ -158,9 +158,23 @@ module.exports = {
   },
 
   getUser(id, callback){
-    return User.findById(id)
+
+    let result = {};
+    User.findById(id)
     .then((user) => {
-      callback(null, user);
+      if(!user){
+        return callback("User not found");
+      }
+      result.user = user;
+      Wiki.scope({method: ["allAuthoredWikis", id]}).all()
+      .then((wikis)=>{
+        result.wikis = wikis;
+        return callback(null, result);
+      })
+      .catch((err) => {
+        console.log(err);
+        callback(err);
+      })
     })
     .catch((err) => {
       console.log(err);
