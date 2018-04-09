@@ -12,9 +12,9 @@ router.post("/user/create", userController.create);
 router.get("/user/signin", userController.signIn);
 router.post("/user/signin", userController.signInPost);
 router.get("/user/signout", userController.signOut);
-router.get("/user/:id", userController.show);
-router.get("/user/:id/upgrade",helper.ensureNormalMember, userController.payment);
-router.post("/user/:id/upgrade",helper.ensureNormalMember, userController.upgrade);
-router.post("/user/:id/downgrade",helper.ensurePremiumMember, userController.downgrade);
+router.get("/users/:id", userController.show);
+router.get("/users/:id/upgrade",helper.ensureNormalMember, userController.payment);
+router.post("/users/:id/upgrade",helper.ensureNormalMember, userController.upgrade);
+router.post("/users/:id/downgrade",helper.ensurePremiumMember, userController.downgrade);
 
 module.exports = router;

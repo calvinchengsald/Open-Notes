@@ -5,7 +5,7 @@ module.exports = class wikiPolicy extends ApplicationPolicy {
 
 
   edit() {
-    return (this._isMember() && !this.record.private ) || (this.record.private && (this._isAdmin() || this._isOwner() || this._isCollaborator())) ;
+    return (this._isMember() && !this.record.private && this._isOwner()) || (this.record.private && (this._isAdmin() || this._isOwner() || this._isCollaborator())) ;
   }
 
   update() {

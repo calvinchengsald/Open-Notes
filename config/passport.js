@@ -15,7 +15,7 @@ module.exports = {
               usernameField: 'email'
           },
           function (email, password, callback) {
-            return User.findOne({ where: {email: email}})
+            return User.findOne({ where: {email: email, activated: true}})
             .then(user => {
               if (!user) {
                 return callback(null, false, {message: 'Incorrect email'});

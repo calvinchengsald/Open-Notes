@@ -33,14 +33,14 @@
         <% if(result.user.role === 0){ %>
           <p> Access: Standard </p>
           <% if(typeof(currentUser) != "undefined" && result.user.id == currentUser.id){ %>
-          <a href="/user/<%=result.user.id%>/upgrade">
+          <a href="/users/<%=result.user.id%>/upgrade">
             <span class="btn btn-primary">Upgrade</span>
           </a>
           <% } %>
         <% } else if(result.user.role === 1){ %>
           <p> Access: Premium </p>
           <% if(typeof(currentUser) != "undefined" && result.user.id == currentUser.id){ %>
-          <form id="postForm" action="/user/<%=result.user.id%>/downgrade" method="post">
+          <form id="postForm" action="/users/<%=result.user.id%>/downgrade" method="post">
           </form>
           <button  class="btn btn-danger" onclick="customConfirmDelete()">Downgrade</button>
 

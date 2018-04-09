@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    activated: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    token: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -54,6 +62,14 @@ module.exports = (sequelize, DataTypes) => {
       user.password = hashedPassword;
       return user;
 
+    });
+
+    User.addScope("withToken", (Token) => {
+      return {
+        where: { token: Token},
+        limit: 1,
+        order: [["createdAt", "ASC"]]
+      }
     });
 
 

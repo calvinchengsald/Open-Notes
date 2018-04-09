@@ -2,6 +2,17 @@
 <html>
   <head>
     <% include ../partials/head.ejs %>
+    <script>
+    function customConfirmDelete() {
+        var confirmText = "Are you sure you want to delete?";
+        if (confirm(confirmText)) {
+            var submit = document.getElementById("postForm");
+            submit.submit();
+        } else {
+
+        }
+    }
+    </script>
   </head>
   <body>
     <% include ../partials/nav.ejs %>
@@ -12,15 +23,18 @@
         <h1><%= wiki.title %></h1>
       </div>
       <div>
+        <a href="/users/<%= wiki.User.id %>">
         <small class="text-muted" >Author: <%= wiki.User.email %></small>
+        </a>
       </div>
 
 
       <% if(currentUser ) { %>
       <a href="/wiki/<%= wiki.id %>/edit" class="btn btn-warning">Edit</a>
-      <form style="display:initial" action="/wiki/<%= wiki.id %>/delete" method="post">
-        <button type="submit" class="btn btn-danger">Delete</button>
+      <form id="postForm" style="display:initial" action="/wiki/<%= wiki.id %>/delete" method="post">
       </form>
+      <button  class="btn btn-danger" onclick="customConfirmDelete()">Delete</button>
+
       <% } %>
 
       <%- wiki.body %>
@@ -33,7 +47,7 @@
          <ul class="list-group">
          <% wiki.collaborators.forEach((collaborator) => { %>
            <li class="list-group-item">
-             <a href="/user/<%= collaborator.User.id %>"> <%= collaborator.User.email %> </a>
+             <a href="/users/<%= collaborator.User.id %>"> <%= collaborator.User.email %> </a>
            </li>
          <% }) %>
          </ul>

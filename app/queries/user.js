@@ -48,37 +48,42 @@ module.exports = {
         callback(null,err);
         return;
       }
-      console.log(process.env.sendgrid);
-      console.log(process.env.userCreateUrl);
-      sgMail.setApiKey(process.env.sendgrid);
+      let ranToken = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+      User.create({
+        name: body.name,
+        email: body.email,
+        password: body.password,
+        activated: false,
+        token: ranToken,
+        role: 0
+      })
+      .then((user)=>{
+        sgMail.setApiKey(process.env.sendgrid);
 
-      const htmlz = `
-      <form method="POST" action="${process.env.userCreateUrl}">
-        <div class="form-group">
-          <input  type="hidden" name="name" placeholder="holder" value="${body.name}" class="form-control"/>
-        </div>
-        <div class="form-group">
-          <input  type="hidden" name="email" placeholder="${body.email}" value="${body.email}" class="form-control"/>
-        </div>
-        <div class="form-group">
-          <input  type="hidden" name="password" placeholder="${body.password}" value="${body.password}" class="form-control"/>
-        </div>
-        <div class="form-group">
-          <input  type="hidden" name="password_conf" placeholder="${body.password_conf}" value="${body.password_conf}" class="form-control"/>
-        </div><br/>
-        <input type="submit" value="Confirm Email" class="btn btn-primary"/>
-      </form>
-      `;
-      const msg = {
-        to: body.email,
-        from: 'calvinanvin@gmail.com',
-        subject: 'Confirmation Email',
-        text: 'Click the link below to confirm',
-        html: htmlz,
-      };
-      sgMail.send(msg);
-      callback(null,null,true);
-      return;
+        const htmlz = `
+        <form method="POST" action="${process.env.userCreateUrl}">
+          <div class="form-group">
+            <input  type="hidden" name="ranToken" placeholder="${ranToken}" value="${ranToken}" class="form-control"/>
+          </div><br/>
+          <input type="submit" value="Confirm Email" class="btn btn-primary"/>
+        </form>
+        `;
+        const msg = {
+          to: body.email,
+          from: 'calvinanvin@gmail.com',
+          subject: 'Confirmation Email',
+          text: 'Click the link below to confirm',
+          html: htmlz,
+        };
+        sgMail.send(msg);
+        callback(null,null,true);
+        return;
+      })
+      .catch((err)=>{
+        console.log(err);
+        callback(err);
+        return;
+      })
 
 
     })
@@ -90,56 +95,25 @@ module.exports = {
   },
 
   create(body, callback){
-    if (body.password != body.password_conf) {
-      let err = {
-        title: "Unmatch Error",
-        msg: "Password must match with confirmation password"
-      };
-      callback(null,err);
-      return;
-    }
-    if (body.name.length <= 0) {
-      let err = {
-        title: "Name Error",
-        msg: "Please enter a name"
-      };
-      callback(null,err);
-      return;
-    }
-    body.email = body.email.toLowerCase();
-    User.all()
+    User.scope({method: ["withToken", body.ranToken]}).all()
     .then((users)=>{
-      let uniqueEmail = true;
-      for(var i = 0; i < users.length; i++){
-        if(users[i].email === body.email){
-          uniqueEmail =false;
-          break;
-        }
+      if(!users[0]){
+        return callback("User not found");
       }
-      if(!uniqueEmail){
-        let err = {
-          title: "Email Error",
-          msg: "This email already exist"
-        };
-        callback(null,err);
-        return;
+      let updatedUser = {
+        token: body.ranToken,
+        activated : true,
       }
-      User.create({
-        name: body.name,
-        email: body.email,
-        password: body.password,
-        role: 0
-      })
-      .then((user)=>{
-        callback(null,null, user);
-        return;
-      })
-      .catch((err)=>{
-        console.log(err);
-        callback(err);
-        return;
-      })
-
+      users[0].update(updatedUser, {
+          fields: Object.keys(updatedUser)
+        })
+        .then((user2) => {
+          return callback(null, user2);
+        })
+        .catch((err) => {
+          console.log(err);
+          return callback("Problem with account activation");
+        });
     })
     .catch((err)=>{
       console.log(err);

@@ -19,7 +19,7 @@
         <p>Upgrading to Premium Membership: $15 </p>
       </div>
 
-      <form action="/user/<%=currentUser.id%>/upgrade" method="POST">
+      <form action="/users/<%=currentUser.id%>/upgrade" method="POST">
         <script
           src="https://checkout.stripe.com/checkout.js" class="stripe-button"
           data-key="pk_test_wYAG6yIkrL25wiIPiBSEx8fv"

@@ -31,23 +31,29 @@ module.exports = {
   },
 
   create(req, res, next){
-    userQueries.create(req.body, (err,err2 ,result) =>{
-      if(err || err2){
-        res.render("user/signup" , {errors: err, error: err2});
+
+    userQueries.create(req.body, (err ,result) =>{
+      if(err){
+        req.flash("notice" , err);
+        res.redirect("/user/signup");
       }
       else {
-        passport.authenticate("local")(req, res, function () {
-      //    console.log("i am here!");
-          if(!req.user){
-            req.flash("notice", "Sign in failed. Please try again.")
-            res.redirect("/user/signin");
-      //      console.log("i am here failed!");
-          } else {
-            req.flash("notice", "Account Created!");
-            res.redirect("/");
-      //      console.log("i am here passed!");
-          }
-        })
+
+          req.flash("notice" , "Account Activated!");
+          res.redirect("/user/signin");
+
+      //   passport.authenticate("local")(req, res, function () {
+      // //    console.log("i am here!");
+      //     if(!req.user){
+      //       req.flash("notice", "Sign in failed. Please try again.")
+      //       res.redirect("/user/signin");
+      // //      console.log("i am here failed!");
+      //     } else {
+      //       req.flash("notice", "Account Created!");
+      //       res.redirect("/");
+      // //      console.log("i am here passed!");
+      //     }
+      //   })
       }
     });
   },
@@ -125,12 +131,12 @@ module.exports = {
           else {
             req.flash("notice", " Account Upgraded!");
           }
-          res.redirect(`/user/${req.user.id}`);
+          res.redirect(`/users/${req.user.id}`);
         });
       }
       else {
         req.flash("notice", " There was an error with the payment!");
-        res.redirect(`/user/${req.user.id}`);
+        res.redirect(`/users/${req.user.id}`);
       }
     })
   },
@@ -142,17 +148,17 @@ module.exports = {
     userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
       if(err){
         req.flash("notice", " There was an error with the downgrade, account");
-        res.redirect(`/user/${req.user.id}`);
+        res.redirect(`/users/${req.user.id}`);
       }
       else {
         wikiQueries.makePublic(req.user.id, (err, wikis)=>{
           if(err){
             req.flash("notice", " There was an error with the downgrade, wikis");
-            res.redirect(`/user/${req.user.id}`);
+            res.redirect(`/users/${req.user.id}`);
           }
           else {
             req.flash("notice", " Account Downgraded!");
-            res.redirect(`/user/${req.user.id}`);
+            res.redirect(`/users/${req.user.id}`);
           }
         })
 

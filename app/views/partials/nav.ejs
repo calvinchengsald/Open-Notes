@@ -5,7 +5,7 @@
   <div class="container">
     <a class="navbar-brand" href="/">Open Notes <%=(typeof(currentUser) != "undefined")?` | ` : ""%> </a>
     <% if(typeof(currentUser) != "undefined") { %>
-      <a class="navbar-brand" href="/user/<%=currentUser.id%>"> <%=currentUser.email%></a>
+      <a class="navbar-brand" href="/users/<%=currentUser.id%>"> <%=currentUser.email%></a>
     <% } %>
     <div class="input-group">
         <% if(typeof(currentUser)== "undefined" ) {%>

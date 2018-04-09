@@ -22,6 +22,13 @@ to generate a strip key, please sign up for a [stripe account](https://stripe.co
 
 User Tiers:
 
-Standard - Can only create and view public wikis
+Standard - Can only create and view public wikis. Editing is only to owner of the wiki
 Premium - Can also create/view private wikis. Private Wikis can only be view/edited by the owner, any Admin level user, or any collaborators specified by the owner.
 Admin - Can do whatever you want.
+
+
+Change:
+
+Added "are you sure you want to delete this wiki"
+authentication with token at emailHelp
+activated flag for each Account

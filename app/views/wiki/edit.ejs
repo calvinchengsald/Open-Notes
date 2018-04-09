@@ -39,31 +39,33 @@
       </form>
 
 
-      <h4> Collaborators <h4>
-      <section id="collaborator-list">
-       <% if(wiki.collaborators) { %>
-         <ul class="list-group">
-         <% wiki.collaborators.forEach((collaborator) => { %>
-           <li class="list-group-item">
-             <form action="/wiki/<%= wiki.id %>/collab/subtract" method="post">
-               <button type="submit" class="btn btn-danger">&#45;</button>
-               <span> <%= collaborator.User.email %> </span>
-               <input type="hidden" value="<%= collaborator.User.email %>" class="form-control" name="collaborator" aria-describedby="titleHelp" >
-               
-             </form>
-           </li>
-         <% }) %>
-         </ul>
-       <% } %>
-      </section>
-      <form action="/wiki/<%= wiki.id %>/collab/add" method="post">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <button type="submit" class="btn btn-primary">&#43;</button>
+      <% if(wiki.userid == currentUser.id && !wiki.private && currentUser > 0) { %>
+        <h4> Collaborators <h4>
+        <section id="collaborator-list">
+         <% if(wiki.collaborators) { %>
+           <ul class="list-group">
+           <% wiki.collaborators.forEach((collaborator) => { %>
+             <li class="list-group-item">
+               <form action="/wiki/<%= wiki.id %>/collab/subtract" method="post">
+                 <button type="submit" class="btn btn-danger">&#45;</button>
+                 <span> <%= collaborator.User.email %> </span>
+                 <input type="hidden" value="<%= collaborator.User.email %>" class="form-control" name="collaborator" aria-describedby="titleHelp" >
+
+               </form>
+             </li>
+           <% }) %>
+           </ul>
+         <% } %>
+        </section>
+        <form action="/wiki/<%= wiki.id %>/collab/add" method="post">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-primary">&#43;</button>
+            </div>
+            <input type="text" class="form-control" name="collaborator" aria-describedby="titleHelp" placeholder="Enter Collaborator Email">
           </div>
-          <input type="text" class="form-control" name="collaborator" aria-describedby="titleHelp" placeholder="Enter Collaborator Email">
-        </div>
-      </form>
+        </form>
+      <% } %>
 
 
     </main>
