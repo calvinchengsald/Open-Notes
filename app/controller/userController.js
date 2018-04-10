@@ -141,6 +141,23 @@ module.exports = {
     })
   },
 
+  upgrade2(req,res,next){ //free
+
+    let updatedUser = {
+      role : 1,
+    };
+    userQueries.updateUser(req.user.id, updatedUser, (err,user)=>{
+      if(err){
+        req.flash("notice", " There was an error with the upgrade");
+      }
+      else {
+        req.flash("notice", " Account Upgraded!");
+      }
+      res.redirect(`/users/${req.user.id}`);
+    });
+
+  },
+
   downgrade(req,res,next){
     let updatedUser = {
       role : 0,

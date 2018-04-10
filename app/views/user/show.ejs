@@ -36,6 +36,9 @@
           <a href="/users/<%=result.user.id%>/upgrade">
             <span class="btn btn-primary">Upgrade</span>
           </a>
+          <form action="/users/<%=result.user.id%>/upgrade2" method="post">
+            <button  type="submit" class="btn btn-secondary">Special Free Upgrade</button>
+          </form>
           <% } %>
         <% } else if(result.user.role === 1){ %>
           <p> Access: Premium </p>

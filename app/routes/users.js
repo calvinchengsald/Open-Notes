@@ -15,6 +15,7 @@ router.get("/user/signout", userController.signOut);
 router.get("/users/:id", userController.show);
 router.get("/users/:id/upgrade",helper.ensureNormalMember, userController.payment);
 router.post("/users/:id/upgrade",helper.ensureNormalMember, userController.upgrade);
+router.post("/users/:id/upgrade2",helper.ensureNormalMember, userController.upgrade2);
 router.post("/users/:id/downgrade",helper.ensurePremiumMember, userController.downgrade);
 
 module.exports = router;
